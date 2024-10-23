@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App with CRUD</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        #todos {
+            margin-top: 20px;
+        }
+
+        .todo-item {
+            background-color: #f1f1f1;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .todo-item h3 {
+            display: inline-block;
+            margin: 0;
+        }
+
+        .buttons {
+            margin-top: 5px;
+        }
+
+        button {
+            margin-left: 5px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Todo App with CRUD</h1>
+    <input type="text" id="title" placeholder="Todo title"> <br /><br />
+    <input type="text" id="description" placeholder="Todo description"> <br /><br />
+    <button onclick="addTodo()">Add Todo</button>
+
+    <div id="todos"></div>
+
+    <script>
+        let globalId = 1;
+        let todoState = [];
+
+        // Function to render all todos to the DOM
+        function renderTodos() {
+            const todosContainer = document.getElementById('todos');
+            todosContainer.innerHTML = ''; // Clear previous DOM
+
+            todoState.forEach(todo => {
+                const todoElement = document.createElement('div');
+                todoElement.classList.add('todo-item');
+                todoElement.setAttribute('id', `todo-${todo.id}`);
+
+                todoElement.innerHTML = `
+                    <h3>${todo.title}</h3>
+                    <p>${todo.description}</p>
+                    <div class="buttons">
+                        <button onclick="editTodo(${todo.id})">Edit</button>
+                        <button onclick="deleteTodo(${todo.id})">Delete</button>
+                    </div>
+                `;
+                todosContainer.appendChild(todoElement);
+            });
+        }
+
+        // Function to add a new todo
+        function addTodo() {
+            const title = document.getElementById("title").value;
+            const description = document.getElementById("description").value;
+
+            if (title && description) {
+                const newTodo = {
+                    id: globalId++,
+                    title: title,
+                    description: description
+                };
+                todoState.push(newTodo);
+                renderTodos();
+
+                // Clear input fields
+                document.getElementById("title").value = '';
+                document.getElementById("description").value = '';
+            } else {
+                alert("Please enter both title and description.");
+            }
+        }
+
+        // Function to delete a todo by its ID
+        function deleteTodo(id) {
+            todoState = todoState.filter(todo => todo.id !== id);
+            renderTodos();
+        }
+
+        // Function to edit a todo by its ID
+        function editTodo(id) {
+            const todo = todoState.find(todo => todo.id === id);
+            const newTitle = prompt("Enter new title", todo.title);
+            const newDescription = prompt("Enter new description", todo.description);
+
+            if (newTitle && newDescription) {
+                todo.title = newTitle;
+                todo.description = newDescription;
+                renderTodos();
+            } else {
+                alert("Please enter valid title and description.");
+            }
+        }
+
+    </script>
+</body>
+
+</html>
