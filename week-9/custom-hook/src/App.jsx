@@ -37,6 +37,7 @@ function App() {
         <div>your mouse position is x: {mousePointer.x} y: {mousePointer.y}</div>
         width: {dimension.width} height: {dimension.height}
         timer is at {count}
+        debouncedValue is {debouncedValue}
         <input type="text" value={inputValue} onChange={(e)=>setInputValue(e.target.value)} />
     </div>
   );
